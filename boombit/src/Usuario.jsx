@@ -21,7 +21,7 @@ export const Usuario = () => {
 
 
     const url = 'https://localhost:44332/api/Usuario';
-    const [visible, setVisible] = useState(0);
+    const [visible, setVisible] = useState();
     const [visibleActividad, setVisibleActividad] = useState(0);
     const [usuario, setUsuario] = useState({...usuarioDefault});
     const [usuarios, setUsuarios] = useState([]);
@@ -36,8 +36,18 @@ export const Usuario = () => {
     };
 
     let array = [];
-    const showDialogCrear = () => { setVisible(!visible) }
-    const showDialogActividad = () => { setVisibleActividad(!visibleActividad) }
+
+    const showDialogCrear = () => { 
+        setVisible(true) ; 
+
+    }
+    const hideDialogCrear = () => { 
+        setVisible(false) ; 
+        setUsuario({...usuarioDefault}); 
+
+    }
+
+    const showDialogActividad = () => { setVisibleActividad(!visibleActividad);  }
     const crearUsuario = (e) => { 
             e.preventDefault();
 
@@ -54,7 +64,7 @@ export const Usuario = () => {
             .then(response => {
                getData();
                setUsuario({...usuarioDefault}); 
-               showDialogCrear();
+               hideDialogCrear();
             });
 
 
@@ -131,7 +141,10 @@ export const Usuario = () => {
             }
         </tbody>
     </table>
-    <dialog  className='mdl-dialog' open={ visibleActividad }> <Actividad idUsuario={usuario.id}></Actividad></dialog>
+    <dialog  className='mdl-dialog' open={ visibleActividad }> 
+        <Actividad idUsuario={usuario.id}></Actividad>
+        <Button type='button' onClick={showDialogActividad} >Cerrar</Button>
+    </dialog>
            
     <dialog open={ visible } className='mdl-dialog' >
     <Form onSubmit={crearUsuario}>
@@ -170,7 +183,7 @@ export const Usuario = () => {
           </Label>
         </FormGroup>
         <input type='submit'  value='Submit'></input>
-        <Button type='button' onClick={showDialogCrear} >Cerrar</Button>
+        <Button type='button' onClick={hideDialogCrear} >Cerrar</Button>
       </Form>
     </dialog>
     </>    
