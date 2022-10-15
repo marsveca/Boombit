@@ -1,20 +1,124 @@
-CREATE TABLE Usuario(
-	Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	Nombre VARCHAR(100) NOT NULL,
-	Apellido VARCHAR(100) NOT NULL,
-	Email VARCHAR(100) NOT NULL,
-	FechaNacimiento DATE NOT NULL,
-	Telefono NUMERIC(18,0) NULL,
-	PaisResidencia VARCHAR(100) NOT NULL,
-	Contactar BIT NOT NULL
-);
-
-CREATE TABLE Actividad(
-	Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	FechaCreacion DATETIME NOT NULL DEFAULT GETDATE(),
-	UsuarioId INT NOT NULL ,
-	Actividad VARCHAR(200) NOT NULL
-	CONSTRAINT FK_UsuarioActividad FOREIGN KEY (UsuarioId)
-	REFERENCES dbo.Usuario(Id)
-);
-
+USE [master]
+GO
+/****** Object:  Database [db_a8e3ac_marsveca]    Script Date: 15/10/2022 1:15:57 ******/
+CREATE DATABASE [db_a8e3ac_marsveca]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'db_a8e3ac_marsveca_Data', FILENAME = N'H:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\db_a8e3ac_marsveca_DATA.mdf' , SIZE = 8192KB , MAXSIZE = 1024000KB , FILEGROWTH = 10%)
+ LOG ON 
+( NAME = N'db_a8e3ac_marsveca_Log', FILENAME = N'H:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\db_a8e3ac_marsveca_Log.LDF' , SIZE = 3072KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [db_a8e3ac_marsveca].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET  MULTI_USER 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET QUERY_STORE = OFF
+GO
+USE [db_a8e3ac_marsveca]
+GO
+/****** Object:  Table [dbo].[Actividad]    Script Date: 15/10/2022 1:16:05 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Actividad](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+	[UsuarioId] [int] NOT NULL,
+	[Actividad] [varchar](200) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Usuario]    Script Date: 15/10/2022 1:16:06 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Usuario](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](100) NOT NULL,
+	[Apellido] [varchar](100) NOT NULL,
+	[Email] [varchar](100) NOT NULL,
+	[FechaNacimiento] [date] NOT NULL,
+	[Telefono] [numeric](18, 0) NULL,
+	[PaisResidencia] [varchar](100) NOT NULL,
+	[Contactar] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Actividad] ADD  DEFAULT (getdate()) FOR [FechaCreacion]
+GO
+ALTER TABLE [dbo].[Actividad]  WITH CHECK ADD  CONSTRAINT [FK_UsuarioActividad] FOREIGN KEY([UsuarioId])
+REFERENCES [dbo].[Usuario] ([Id])
+GO
+ALTER TABLE [dbo].[Actividad] CHECK CONSTRAINT [FK_UsuarioActividad]
+GO
+USE [master]
+GO
+ALTER DATABASE [db_a8e3ac_marsveca] SET  READ_WRITE 
+GO
